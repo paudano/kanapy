@@ -2,6 +2,7 @@
 Basic k-mer manipulation utilities.
 """
 
+
 class KmerUtil:
     """
     Manages basic k-mer functions, such as converting formats, appending bases, and reverse-complementing.
@@ -14,7 +15,7 @@ class KmerUtil:
             raise RuntimeError('Non-zero minimizer mask is not yet supported')
 
         # Size of k-mers this utility works with.
-        self.k_size = k_size
+        self.k_size = int(k_size)
 
         # Size of k-mers in bits
         self.k_bit_size = self.k_size * 2
@@ -23,7 +24,7 @@ class KmerUtil:
         self.k_min_size = k_min_size
 
         # Minimizer mask if set and <code>kMinSize</code> is not <code>0</code>.
-        self.k_min_mask = k_min_mask;
+        self.k_min_mask = k_min_mask
 
         # Mask for k-mer part of integer.
         self.k_mask = ~(~0 << (self.k_size * 2))
@@ -44,7 +45,7 @@ class KmerUtil:
             self.minimizer_mask = 0
 
         # Translates a two-bit k-mer to a character.
-        self.INT_TO_BASE = ['A', 'C', 'G', 'T'];
+        self.INT_TO_BASE = ['A', 'C', 'G', 'T']
 
         self.BASE_TO_INT = {
             'A': 0x0,
@@ -130,6 +131,21 @@ class KmerUtil:
             kmer >>= 2
 
         return rev_kmer >> 2
+
+    def canonical_complement(self, kmer):
+        """
+        Get the canonical k-mer of a k-mer. The canonical k-mer is the lesser of the k-mer and its reverse-complement.
+
+        :param kmer: K-mer.
+
+        :return: `kmer` if it is less than the reverse-complement, and the reverse-complement otherwise.
+        """
+        kmer_rev = self.rev_complement(kmer)
+
+        if kmer_rev < kmer:
+            return kmer_rev
+
+        return kmer
 
     def minimizer(self, kmer):
         """
