@@ -17,6 +17,9 @@ def dotplot(seq_x, seq_y, config=dict(), title=None, anno_list=None):
     if 'kutil' in config:
         kutil = config['kutil']
 
+    if anno_list is None:
+        anno_list = list()
+
     else:
         if 'k' in config:
             kutil = kanapy.util.kmer.KmerUtil(np.int32(config['k']))
