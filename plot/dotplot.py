@@ -22,7 +22,7 @@ def dotplot(seq_x, seq_y, config=dict(), title=None, anno_list=None):
 
     else:
         if 'k' in config:
-            kutil = kanapy.util.kmer.KmerUtil(np.int32(config['k']))
+            kutil = kanapy.util.kmer.KmerUtil(int(config['k']))
         else:
             kutil = kanapy.util.kmer.KmerUtil(32)
 
@@ -236,8 +236,20 @@ def _plot_anno_element(ax, anno_element, plot_props):
                 'Missing y for hlines annotation: element {}'.format(anno_element_index)
             )
 
+        if 'xmin' not in anno_element:
+            raise RuntimeError(
+                'Missing xmin for hlines annotation: element {}'.format(anno_element_index)
+            )
+
+        if 'xmax' not in anno_element:
+            raise RuntimeError(
+                'Missing xmax for hlines annotation: element {}'.format(anno_element_index)
+            )
+
         ax.hlines(
-            anno_element.get('y'),
+            y=anno_element.get('y'),
+            xmin=anno_element.get('xmin'),
+            xmax=anno_element.get('xmax'),
             color=anno_element.get('color', 'black'),
             alpha=anno_element.get('alpha', 1.0),
             linestyles=anno_element.get('style', 'solid')
